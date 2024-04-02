@@ -31,6 +31,16 @@
 (exact? 1) ;returns true if its an exact value (no decimal),
 ;the "?" is not an operator its part of the function name to idicate it returns a bool
 
+;cond is a more felxible if
+(define x 0)
+
+(cond
+  [(positive? x) (error "x is pos")]
+  [(zero? x) (error "x is zero")]
+  [(negative? x) "x is negative"]
+  [else "x is imaginary"]
+  )
+
 ;---------------Lists and Pairs---------------
 
 ;pair data type
