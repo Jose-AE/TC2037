@@ -155,3 +155,112 @@
 
 ;swapper
 (display "\n---swapper ---\n") ;
+
+(define (swapper a b lst)
+
+  (map (lambda (x)
+
+         (cond
+           [(eq? x a) b]
+           [(eq? x b) a]
+           [else x]))
+       lst))
+
+(swapper 1 2 '())
+(swapper 1 2 '(4 4 5 2 4 8 2 5 6 4 5 1 9 5 9 9 1 2 2 4))
+(swapper 1 2 '(4 3 4 9 9 3 3 3 9 9 7 9 3 7 8 7 8 4 5 6))
+(swapper 'purr
+         'kitty
+         '(soft kitty warm kitty little ball of fur happy kitty sleepy kitty purr purr purr))
+
+;dot-product
+(display "\n---dot-product---\n") ;
+
+(define (dot-product lst-1 lst-2)
+
+  (if (or (null? lst-1) (null? lst-2))
+
+      0
+
+      (+ (* (car lst-1) (car lst-2)) (dot-product (cdr lst-1) (cdr lst-2)))))
+
+(dot-product '() '())
+
+(dot-product '(1 2 3) '(4 5 6))
+
+(dot-product '(1.3 3.4 5.7 9.5 10.4) '(-4.5 3.0 1.5 0.9 0.0))
+
+;average
+(display "\n---average---\n") ;
+
+(define (sum lst)
+
+  (if (= (length lst) 0) 0 (+ (car lst) (sum (cdr lst)))))
+
+(define (average lst)
+
+  (if (null? lst) 0 (/ (sum lst) (length lst))))
+
+(average '())
+(average '(4))
+(average '(5 6 1 6 0 1 2))
+(average '(1.7 4.5 0 2.0 3.4 5 2.5 2.2 1.2))
+
+;standard-deviation
+(display "\n---standard-deviation---\n") ;
+
+(define (standard-deviation lst)
+  (if (null? lst)
+      0
+      (sqrt (* (/ 1 (length lst))
+               (sum (map (lambda (x) (* (- x (average lst)) (- x (average lst)))) lst))))))
+
+(standard-deviation '())
+(standard-deviation '(4 8 15 16 23 42))
+(standard-deviation '(110 105 90 100 95))
+(standard-deviation '(9 2 5 4 12 7 8 11 9 3 7 4 12 5 4 10 9 6 9 4))
+
+;replic
+(display "\n---replic---\n") ;
+
+(define (replic n lst)
+
+  (if (= n 0)
+      '()
+
+      (apply append (map (lambda (x) (make-list n x)) lst))))
+
+(replic 7 '())
+(replic 0 '(a b c))
+(replic 3 '(a))
+(replic 4 '(1 2 3 4))
+
+;expand
+(display "\n---expand---\n") ;
+
+(define (expand lst)
+
+  (define result '())
+
+  (for ([i (in-range (length lst))])
+
+    (set! result (append result (make-list (add1 i) (list-ref lst i)))))
+
+  result)
+
+(expand '())
+(expand '(a))
+(expand '(1 2 3 4))
+(expand '(a b c d e))
+
+;binary
+(display "\n---binary---\n") ;
+
+(define (binary n)
+  (if (= n 0)
+      '()
+      (append (binary (quotient n 2)) (list (remainder n 2)))))
+
+(binary 0)
+(binary 30)
+(binary 45123)
