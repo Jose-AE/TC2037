@@ -1,5 +1,11 @@
 #lang racket
 
+;custom custom-map fun
+(define (custom-map func lst)
+  (cond
+    [(null? lst) '()]
+    [else (cons (func (car lst)) (custom-map func (cdr lst)))]))
+
 ;fahrenheit-to-celsius
 (display "\n---fahrenheit-to-celsius---\n")
 (define (fahrenheit-to-celsius f)
@@ -67,9 +73,8 @@
 
 ;duplicate
 (display "\n---duplicate---\n")
-
 (define (duplicate lst)
-  (if (null? lst) '() (append-map (lambda (x) (list x x)) lst)))
+  (if (null? lst) '() (apply append (custom-map (lambda (x) (list x x)) lst))))
 
 (duplicate `())
 (duplicate '(1 2 3 4 5))
@@ -102,7 +107,7 @@
 
 (define (enlist lst)
 
-  (if (null? lst) `() (map (lambda (v) (list v)) lst)))
+  (if (null? lst) `() (custom-map (lambda (v) (list v)) lst)))
 
 (enlist '())
 (enlist '(a b c))
@@ -123,7 +128,7 @@
 
 (define (add-list lst)
   (let ([sum 0])
-    (map (lambda (x) (set! sum (+ sum x))) lst)
+    (custom-map (lambda (x) (set! sum (+ sum x))) lst)
     sum))
 
 (add-list '())
@@ -134,7 +139,7 @@
 (display "\n---invert-pairs---\n") ;
 (define (invert-pairs lst)
 
-  (map (lambda (v) (list (car (cdr v)) (car v))) lst))
+  (custom-map (lambda (v) (list (car (cdr v)) (car v))) lst))
 
 (invert-pairs '())
 (invert-pairs '((a 1) (a 2) (b 1) (b 2)))
@@ -158,13 +163,13 @@
 
 (define (swapper a b lst)
 
-  (map (lambda (x)
+  (custom-map (lambda (x)
 
-         (cond
-           [(eq? x a) b]
-           [(eq? x b) a]
-           [else x]))
-       lst))
+                (cond
+                  [(eq? x a) b]
+                  [(eq? x b) a]
+                  [else x]))
+              lst))
 
 (swapper 1 2 '())
 (swapper 1 2 '(4 4 5 2 4 8 2 5 6 4 5 1 9 5 9 9 1 2 2 4))
@@ -213,7 +218,7 @@
   (if (null? lst)
       0
       (sqrt (* (/ 1 (length lst))
-               (sum (map (lambda (x) (* (- x (average lst)) (- x (average lst)))) lst))))))
+               (sum (custom-map (lambda (x) (* (- x (average lst)) (- x (average lst)))) lst))))))
 
 (standard-deviation '())
 (standard-deviation '(4 8 15 16 23 42))
@@ -228,7 +233,7 @@
   (if (= n 0)
       '()
 
-      (apply append (map (lambda (x) (make-list n x)) lst))))
+      (apply append (custom-map (lambda (x) (make-list n x)) lst))))
 
 (replic 7 '())
 (replic 0 '(a b c))
@@ -257,9 +262,7 @@
 (display "\n---binary---\n") ;
 
 (define (binary n)
-  (if (= n 0)
-      '()
-      (append (binary (quotient n 2)) (list (remainder n 2)))))
+  (if (= n 0) '() (append (binary (quotient n 2)) (list (remainder n 2)))))
 
 (binary 0)
 (binary 30)
